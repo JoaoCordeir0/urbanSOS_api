@@ -1,0 +1,30 @@
+{
+  "name": "urbansos_web",
+  "version": "1.0.0",
+  "description": "Projeto para reporte urbano",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoaoCordeir0/urbansos_web.git"
+  },
+  "author": "JV.Cordeiro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoaoCordeir0/urbansos_web/issues"
+  },
+  "homepage": "https://github.com/JoaoCordeir0/urbansos_web#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "sequelize": "^6.32.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
