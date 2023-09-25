@@ -4,7 +4,13 @@ const auth = require("./middleware/auth");
 
 // Controllers
 const home = require('./controllers/homeController')
+const user = require('./controllers/userController')
 
-router.get('/', auth, home.renderHome)
+// User routes
+router.post('/user/register', auth, user.insertUser)
+router.get('/user/details/:id', auth, user.userDetails)
+router.delete('user/delete/:id', auth, user.userDelete)
+
+router.get('/', home.renderHome)
  
 module.exports = router

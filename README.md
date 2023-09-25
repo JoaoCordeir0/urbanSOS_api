@@ -15,7 +15,7 @@ const token = jwt.sign(
     { date: `${year}-${month}-${day}` },
     process.env.TOKEN_KEY,
     {
-        expiresIn: "1h",
+        expiresIn: "5h",
     }
 );
 

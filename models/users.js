@@ -1,18 +1,20 @@
 const sequelize = require('sequelize')
 const conn = require('./database')
 
-const users = conn.define('users', {
+const user = conn.define('users', {
     name: {
         type: sequelize.STRING,
         allowNull: false,        
     },
     email: {
         type: sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
     cpf: {
         type: sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     password: {
         type: sequelize.STRING,
@@ -28,6 +30,6 @@ const users = conn.define('users', {
     }
 })
 
-users.sync({force: false})
+user.sync({force: false})
 
-module.exports = users
+module.exports = user
