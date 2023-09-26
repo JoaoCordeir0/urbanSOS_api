@@ -7,9 +7,11 @@ const home = require('./controllers/homeController')
 const user = require('./controllers/userController')
 
 // User routes
+router.post('/user/recoverpassword', user.userRecoverPassword)
+router.post('/user/login', user.userLogin)
 router.post('/user/register', auth, user.insertUser)
+router.delete('/user/delete/:id', auth, user.userDelete)
 router.get('/user/details/:id', auth, user.userDetails)
-router.delete('user/delete/:id', auth, user.userDelete)
 
 router.get('/', home.renderHome)
  
