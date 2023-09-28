@@ -13,6 +13,6 @@ router.post('/user/register', auth, user.insertUser)
 router.delete('/user/delete/:id', auth, user.userDelete)
 router.get('/user/details/:id', auth, user.userDetails)
 
-router.get('/', home.renderHome)
+router.get('/', home.welcome)
  
 module.exports = router

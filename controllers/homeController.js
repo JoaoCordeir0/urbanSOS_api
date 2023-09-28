@@ -1,7 +1,9 @@
-const renderHome = (request, response) => {
-    return response.status(200).json({ message: 'Bem vindo a API do UrbanSOS' });
+const welcome = (request, response) => {
+    return response.render('home', {
+        appName: 'UrbanSOS'
+    })
 }
 
 module.exports = {
-    renderHome
+    welcome
 }
