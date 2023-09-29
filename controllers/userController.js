@@ -1,10 +1,10 @@
-const userModel = require('../models/users')
+const userModel = require('../models/userModel')
 const Op = require('sequelize').Op;
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
 // Função que insere um novo usuário 
-const insertUser = (request, response) => {
+const userRegister = (request, response) => {
     userModel.create({
         name: request.body.user_name,
         email: request.body.user_email,
@@ -16,7 +16,7 @@ const insertUser = (request, response) => {
         response.status(200).json({ message: 'User insert success!' });
     }).catch((err) => {      
         response.status(500).json({ 
-            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
+            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : err 
         });
     })
 }
@@ -54,11 +54,11 @@ const userDelete = async (request, response) => {
 const userLogin = (request, response) => {
     userModel.findOne({
         raw: true, where: { 
-            [Op.or]: [{ cpf: request.body.username }, { email: request.body.username }],
+            [Op.or]: [{ cpf: request.body.user_username }, { email: request.body.user_username }],
             status: 1 
         }
     }).then(user => {
-        if (user != undefined && bcrypt.compareSync(request.body.password, user.password))
+        if (user != undefined && bcrypt.compareSync(request.body.user_password, user.password))
         {     
             const token = jwt.sign(
                 { user_id: user.id },
@@ -85,10 +85,10 @@ const userUpdate = async (request, response) => {
         email: request.body.user_email,
         cpf: request.body.user_cpf,
         password: bcrypt.hashSync(request.body.user_password, 8),
-        status: request.body.status,
+        status: request.body.user_status,
         lvl: 1,
     }, {
-        where: { id: request.body.userID }
+        where: { id: request.body.user_id }
     }).then(user => {
         response.status(200).json({ message: 'User updated success!' })
     }).catch((err) => {
@@ -115,9 +115,10 @@ const userRecoverPassword = async (request, response) => {
 }
 
 module.exports = {
-    insertUser,
+    userRegister,
     userDetails,
     userDelete,
     userLogin,
     userRecoverPassword,
+    userUpdate,
 }
