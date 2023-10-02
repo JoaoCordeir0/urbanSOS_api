@@ -18,7 +18,7 @@ const reportRegister = (request, response) => {
 }
 
 // Função que retorna os reports de um usuário
-const reportListById = (request, response) => {
+const reportListByUser = (request, response) => {
     reportModel.findAll({
         raw: true, where: { user_id: request.params.user_id }
     }).then(report => {
@@ -36,7 +36,7 @@ const reportListById = (request, response) => {
 }
 
 // Função que lista todos os reports
-const reportList = (request, response) => {
+const reportListByCity = (request, response) => {
     reportModel.findAll({
         raw: true
     }).then(report => {
@@ -55,6 +55,6 @@ const reportList = (request, response) => {
 
 module.exports = {
     reportRegister,
-    reportListById,
-    reportList,
+    reportListByUser,
+    reportListByCity,
 }

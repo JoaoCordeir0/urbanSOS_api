@@ -25,13 +25,23 @@ const report = conn.define('reports', {
     situation: {
         type: sequelize.INTEGER,
         allowNull: false
-    },
+    },   
     user_id: {
         type: sequelize.INTEGER,
         allowNull: false,
-        references: 'users',
-        referencesKey: 'id' 
-    }
+        references: {
+            model: 'users',
+            key: 'id' ,
+        }                
+    },    
+    city_id: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'id' ,
+        }  
+    }   
 })
 
 report.sync({force: false})

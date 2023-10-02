@@ -5,12 +5,13 @@ const auth = require("./middleware/auth");
 // Controllers
 const home = require('./controllers/homeController')
 const user = require('./controllers/userController')
+const city = require('./controllers/cityController')
 const report = require('./controllers/reportController')
 
 // Report routes
 router.post('/report/register', auth, report.reportRegister)
-router.get('/report/list/all', auth, report.reportList)
-router.get('/report/list/user/:user_id', auth, report.reportListById)
+router.get('/report/list/city/:city_id', auth, report.reportListByCity)
+router.get('/report/list/user/:user_id', auth, report.reportListByUser)
 
 // User routes
 router.post('/user/recoverpassword', user.userRecoverPassword)
