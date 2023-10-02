@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "prod": "pm2 start app.js --name=urbansos_api"
+    "start": "pm2 start app.js --name=urbansos_api",    
+    "stop": "pm2 stop urbansos_api",
+    "restart": "pm2 restart urbansos_api"
   },
   "repository": {
     "type": "git",
