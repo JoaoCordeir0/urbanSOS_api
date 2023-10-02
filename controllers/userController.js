@@ -80,20 +80,31 @@ const userLogin = (request, response) => {
 
 // Função que atualiza um usuário
 const userUpdate = async (request, response) => {
-    await userModel.update({
-        name: request.body.user_name,
-        email: request.body.user_email,
-        cpf: request.body.user_cpf,
-        password: bcrypt.hashSync(request.body.user_password, 8),
-        status: request.body.user_status,
-        lvl: 1,
-    }, {
-        where: { id: request.body.user_id }
-    }).then(user => {
-        response.status(200).json({ message: 'User updated success!' })
-    }).catch((err) => {
-        response.status(500).json({ message: 'Internal error!' });
+    const count = await userModel.count({
+        where: { id: request.body.user_id },
     })
+      
+    if (count)
+    {
+        await userModel.update({
+            name: request.body.user_name,
+            email: request.body.user_email,
+            cpf: request.body.user_cpf,
+            password: bcrypt.hashSync(request.body.user_password, 8),
+            status: request.body.user_status,
+            lvl: 1,
+        }, {
+            where: { id: request.body.user_id }
+        }).then(user => {
+            response.status(200).json({ message: 'User updated success!' })
+        }).catch((err) => {
+            response.status(500).json({ message: 'Internal error!' });
+        })
+    }
+    else
+    {
+        response.status(200).json({ message: 'User not found.' })
+    }
 }
 
 // Função que recupera a senha

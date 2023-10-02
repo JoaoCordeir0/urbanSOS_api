@@ -13,6 +13,7 @@ const city = conn.define('cities', {
     email: {
         type: sequelize.STRING,
         allowNull: false,
+        unique: true,
     },
 })
 

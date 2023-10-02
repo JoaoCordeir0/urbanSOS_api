@@ -9,11 +9,14 @@ const reportRegister = (request, response) => {
         latitude: request.body.report_latitude,
         longitude: request.body.report_longitude,
         situation: request.body.report_situation,
-        user_id: request.body.report_user_id
+        user_id: request.body.report_user_id,
+        city_id: request.body.report_city_id
     }).then(() => {
         response.status(200).json({ message: 'Report insert success!' });
     }).catch((err) => {      
-        response.status(500).json({ message: 'Internal error!' });
+        response.status(500).json({ 
+            message: err.name == 'SequelizeForeignKeyConstraintError' ? 'Error! User or City does not exist!' : 'Internal error!'
+         })
     })
 }
 
@@ -21,10 +24,10 @@ const reportRegister = (request, response) => {
 const reportListByUser = (request, response) => {
     reportModel.findAll({
         raw: true, where: { user_id: request.params.user_id }
-    }).then(report => {
-        if (report != undefined)
+    }).then(reports => {
+        if (reports != undefined)
         {     
-            response.status(200).json(report)               
+            response.status(200).json(reports)               
         }
         else
         {
@@ -35,14 +38,14 @@ const reportListByUser = (request, response) => {
     })
 }
 
-// Função que lista todos os reports
+// Função que retorna os reports de uma cidade
 const reportListByCity = (request, response) => {
     reportModel.findAll({
-        raw: true
-    }).then(report => {
-        if (report != undefined)
+        raw: true, where: { city_id: request.params.city_id }
+    }).then(reports => {
+        if (reports != undefined)
         {     
-            response.status(200).json(report)               
+            response.status(200).json(reports)               
         }
         else
         {
@@ -53,8 +56,34 @@ const reportListByCity = (request, response) => {
     })
 }
 
+// Função que atualiza o status de um report
+const reportUpdateSituation = async (request, response) => {
+    const count = await reportModel.count({
+        where: { id: request.body.report_id },
+    })
+      
+    if (count)
+    {
+        await reportModel.update({
+            situation: request.body.situation_id,
+        }, {
+            where: { id: request.body.report_id }
+        }).then(() => {
+            response.status(200).json({ message: 'Report situation updated success!' })
+        }).catch((err) => {
+            response.status(500).json({ message: 'Internal error!' });
+        })
+    }
+    else
+    {
+        response.status(200).json({ message: 'Report not found!' })
+    }
+    
+}
+
 module.exports = {
     reportRegister,
     reportListByUser,
     reportListByCity,
+    reportUpdateSituation,
 }
