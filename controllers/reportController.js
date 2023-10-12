@@ -2,16 +2,9 @@ const reportModel = require('../models/reportModel')
 
 // Função que insere um novo report 
 const reportRegister = (request, response) => {
-    reportModel.create({
-        title: request.body.report_title,
-        description: request.body.report_description,
-        image: request.body.report_image,
-        latitude: request.body.report_latitude,
-        longitude: request.body.report_longitude,
-        situation: request.body.report_situation,
-        user_id: request.body.report_user_id,
-        city_id: request.body.report_city_id
-    }).then(() => {
+    reportModel.create(
+        request.body
+    ).then(() => {
         response.status(200).json({ message: 'Report insert success!' });
     }).catch((err) => {      
         response.status(500).json({ 

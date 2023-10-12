@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const auth = require("./middleware/auth");
+const auth = require("../middleware/auth");
 
 // Controllers
-const user = require('./controllers/userController')
-const city = require('./controllers/cityController')
-const report = require('./controllers/reportController')
+const user = require('../controllers/userController')
+const city = require('../controllers/cityController')
+const report = require('../controllers/reportController')
 
 // City routes
 router.post('/city/register', auth, city.cityRegister)
