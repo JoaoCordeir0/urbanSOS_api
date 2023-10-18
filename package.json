@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "start": "pm2 start app.js --name=urbansos_api",    
+    "start": "pm2 start app.js --name=urbansos_api",
     "stop": "pm2 stop urbansos_api",
     "restart": "pm2 restart urbansos_api"
   },
@@ -23,6 +23,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",

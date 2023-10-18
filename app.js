@@ -3,6 +3,8 @@ require('dotenv').config()
 const express = require('express')
 const router = require('./src/router/router')
 
+const cors = require('cors')
+
 const app = express()
 
 // Lib body-parse
@@ -16,6 +18,9 @@ app.set('views', __dirname + '/src/views');
 
 // Use public directory
 app.use(express.static('public'))
+
+// Use cors 
+app.use(cors({ origin: '*' }));
 
 // API routes 
 app.use(router)
