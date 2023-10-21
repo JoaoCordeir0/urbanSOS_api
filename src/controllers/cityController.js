@@ -7,7 +7,9 @@ const cityRegister = (request, response) => {
     ).then(() => {
         response.status(200).json({ message: 'City insert success!' });
     }).catch((err) => {      
-        response.status(500).json({ message: 'Internal error!' });
+        response.status(500).json({ 
+            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
+        });
     })
 }
 

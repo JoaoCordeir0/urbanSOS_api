@@ -1,3 +1,4 @@
+const log = require("../controllers/logController")
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (request, response, next) => {
@@ -11,7 +12,12 @@ const verifyToken = (request, response, next) => {
     try 
     {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY)
-        console.log(decoded)
+                
+        log.register({
+            requester: decoded.requester,
+            token: token,
+            action: decoded.action
+        })        
     } 
     catch (err) 
     {
