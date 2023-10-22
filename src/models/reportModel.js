@@ -23,10 +23,14 @@ const report = conn.define('reports', {
         allowNull: false
     },
     situation: {
+        type: sequelize.ENUM('Tolerable', 'Serious', 'Urgent'),
+        allowNull: false,       
+    },  
+    status: {
         type: sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,       
     },   
-    user_id: {
+    user: {
         type: sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -34,7 +38,7 @@ const report = conn.define('reports', {
             key: 'id' ,
         }                
     },    
-    city_id: {
+    city: {
         type: sequelize.INTEGER,
         allowNull: false,
         references: {
