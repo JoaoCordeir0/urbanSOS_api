@@ -64,7 +64,7 @@ const userLogin = (request, response) => {
             }   
 
             const token = jwt.sign(
-                { user_id: user.id },
+                { user: user.id },
                 process.env.TOKEN_KEY,
                 { 
                     expiresIn: '5h',
