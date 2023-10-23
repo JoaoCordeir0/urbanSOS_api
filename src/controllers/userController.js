@@ -27,48 +27,56 @@ const userRegister = (request, response) => {
 
 // Função que lista os usuário administradores
 const userAdmList = (request, response) => {     
-    userModel.findAll({
-        raw: true, where: { lvl: 1, city: request.params.city }
-    }).then((adms) => {
-        if (adms.lenght)
-        {     
-            response.status(200).json(adms)               
-        }
-        else
-        {
-            response.status(200).json({ message: 'Adms not found!' });
-        }
-    }).catch((err) => {      
-        log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
-        })  
-        response.status(500).json({ message: 'Internal error!' });
+    const count = userModel.count({
+        where: { lvl: 1, city: request.params.city },
     })
+    
+    if (count)
+    {
+        userModel.findAll({
+            raw: true, where: { lvl: 1, city: request.params.city }
+        }).then((adms) => {
+            response.status(200).json(adms)                   
+        }).catch((err) => {      
+            log.register({
+                requester: 'API - Error',
+                token: err.name,
+                action: err.message
+            })  
+            response.status(500).json({ message: 'Internal error!' });
+        })
+    }
+    else 
+    {
+        response.status(200).json({ message: 'Adms not found!' });
+    }    
 }
 
 // Função que retorna as informações de um usuário especifico
 const userDetails = (request, response) => {
-    userModel.findOne({
-        raw: true, where: { id: request.params.id }
-    }).then(user => {
-        if (user.lenght)
-        {     
+    const count = userModel.count({
+        where: { id: request.params.id  },
+    })    
+
+    if (count)
+    {
+        userModel.findOne({
+            raw: true, where: { id: request.params.id }
+        }).then(user => {
             response.status(200).json(user)               
-        }
-        else
-        {
-            response.status(200).json({ message: 'User not found!' });
-        }
-    }).catch((err) => {
-        log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
-        })  
-        response.status(500).json({ message: 'Internal error!' });
-    })
+        }).catch((err) => {
+            log.register({
+                requester: 'API - Error',
+                token: err.name,
+                action: err.message
+            })  
+            response.status(500).json({ message: 'Internal error!' });
+        })
+    }
+    else
+    {
+        response.status(200).json({ message: 'User not found!' });
+    }
 }
 
 // Função que deleta um usuário especifico
