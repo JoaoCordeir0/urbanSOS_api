@@ -24,6 +24,7 @@ router.post('/user/register', auth, user.userRegister)
 router.put('/user/update', auth, user.userUpdate)
 router.delete('/user/delete/:id', auth, user.userDelete)
 router.get('/user/details/:id', auth, user.userDetails)
+router.get('/user/admin/list/:city', auth, user.userAdmList)
 
 // Welcome router
 router.get('/', (request, response) => {

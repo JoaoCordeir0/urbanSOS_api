@@ -42,7 +42,7 @@ const report = conn.define('reports', {
         type: sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'users',
+            model: 'cities',
             key: 'id' ,
         }  
     }   

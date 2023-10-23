@@ -1,4 +1,5 @@
 const cityModel = require('../models/cityModel')
+const log = require('./logController')
 
 // Função que insere uma nova cidade 
 const cityRegister = (request, response) => {
@@ -7,6 +8,11 @@ const cityRegister = (request, response) => {
     ).then(() => {
         response.status(200).json({ message: 'City insert success!' });
     }).catch((err) => {      
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        }) 
         response.status(500).json({ 
             message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
         });
@@ -27,6 +33,11 @@ const cityList = (request, response) => {
             response.status(200).json({ message: 'Cities not found!' });
         }
     }).catch((err) => {      
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        }) 
         response.status(500).json({ message: 'Internal error!' });
     })
 }

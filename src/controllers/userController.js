@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel')
+const log = require("./logController")
 const Op = require('sequelize').Op;
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
@@ -13,9 +14,37 @@ const userRegister = (request, response) => {
     ).then(() => {
         response.status(200).json({ message: 'User insert success!' });
     }).catch((err) => {      
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })   
         response.status(500).json({                         
             message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
         });
+    })
+}
+
+// Função que lista os usuário administradores
+const userAdmList = (request, response) => {     
+    userModel.findAll({
+        raw: true, where: { lvl: 1, city: request.params.city }
+    }).then((adms) => {
+        if (adms.lenght)
+        {     
+            response.status(200).json(adms)               
+        }
+        else
+        {
+            response.status(200).json({ message: 'Adms not found!' });
+        }
+    }).catch((err) => {      
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })  
+        response.status(500).json({ message: 'Internal error!' });
     })
 }
 
@@ -24,7 +53,7 @@ const userDetails = (request, response) => {
     userModel.findOne({
         raw: true, where: { id: request.params.id }
     }).then(user => {
-        if (user != undefined)
+        if (user.lenght)
         {     
             response.status(200).json(user)               
         }
@@ -33,6 +62,11 @@ const userDetails = (request, response) => {
             response.status(200).json({ message: 'User not found!' });
         }
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })  
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -44,6 +78,11 @@ const userDelete = async (request, response) => {
     }).then(() => {
         response.status(200).json({ message: 'User deleted success!' });
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })  
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -77,6 +116,11 @@ const userLogin = (request, response) => {
             response.status(200).json({ message: 'Username or password incorrect!' });
         }
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })  
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -94,6 +138,11 @@ const userUpdate = async (request, response) => {
         }).then(() => {
             response.status(200).json({ message: 'User updated success!' })
         }).catch((err) => {
+            log.register({
+                requester: 'API - Error',
+                token: err.name,
+                action: err.message
+            })  
             response.status(500).json({ message: 'Internal error!' });
         })
     }
@@ -117,11 +166,17 @@ const userRecoverPassword = async (request, response) => {
             response.status(200).json({ message: 'Email not found!' });
         }
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        })  
         response.status(500).json({ message: 'Internal error!', err: err });
     })
 }
 
 module.exports = {
+    userAdmList,
     userRegister,
     userDetails,
     userDelete,

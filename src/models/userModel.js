@@ -27,7 +27,15 @@ const user = conn.define('users', {
     lvl: {
         type: sequelize.INTEGER,
         allowNull: false
-    }
+    },
+    city: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'cities',
+            key: 'id' ,
+        }  
+    }  
 })
 
 user.sync({force: false})

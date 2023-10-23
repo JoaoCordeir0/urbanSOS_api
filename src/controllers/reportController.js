@@ -1,4 +1,5 @@
 const reportModel = require('../models/reportModel')
+const log = require("./logController")
 
 // Função que insere um novo report 
 const reportRegister = (request, response) => {
@@ -7,9 +8,14 @@ const reportRegister = (request, response) => {
     ).then(() => {
         response.status(200).json({ message: 'Report insert success!' });
     }).catch((err) => {      
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        }) 
         response.status(500).json({ 
             message: err.name == 'SequelizeForeignKeyConstraintError' ? 'Error! User or City does not exist!' : 'Internal error!'
-         })
+        })
     })
 }
 
@@ -27,6 +33,11 @@ const reportListByUser = (request, response) => {
             response.status(200).json({ message: 'No reports available!' });
         }
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        }) 
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -45,6 +56,11 @@ const reportListByCity = (request, response) => {
             response.status(200).json({ message: 'Report not found!' });
         }
     }).catch((err) => {
+        log.register({
+            requester: 'API - Error',
+            token: err.name,
+            action: err.message
+        }) 
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -64,6 +80,11 @@ const reportUpdateSituation = async (request, response) => {
         }).then(() => {
             response.status(200).json({ message: 'Report situation updated success!' })
         }).catch((err) => {
+            log.register({
+                requester: 'API - Error',
+                token: err.name,
+                action: err.message
+            }) 
             response.status(500).json({ message: 'Internal error!' });
         })
     }
