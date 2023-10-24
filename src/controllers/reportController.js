@@ -45,7 +45,7 @@ const reportListByUser = (request, response) => {
 // Função que retorna os reports de uma cidade
 const reportListByCity = (request, response) => {
     reportModel.findAll({
-        raw: true, where: { city: request.params.city_id }
+        raw: true, where: { city: request.params.city }
     }).then(reports => {
         if (reports != undefined)
         {     
@@ -95,9 +95,38 @@ const reportUpdateSituation = async (request, response) => {
     
 }
 
+// Função que coleta métricas que são usadas na dashboard do UrbanSOS Web
+const reportInfo = async (request, response) => {
+    try 
+    {
+        const count_total = await reportModel.count({
+            where: { id: request.params.city },
+        })
+        const count_opened = await reportModel.count({
+            where: { id: request.params.city, status: 0 },
+        })
+        const count_resolved = await reportModel.count({
+            where: { id: request.params.city, status: 1 },
+        })
+
+        const data = {
+            count_total: count_total,
+            count_opened: count_opened,
+            count_resolved: count_resolved,
+        }
+
+        response.status(200).json(data)
+    }
+    catch(e)
+    {
+        response.status(500).json({ message: 'Internal error!' });
+    }
+}
+
 module.exports = {
     reportRegister,
     reportListByUser,
     reportListByCity,
     reportUpdateSituation,
+    reportInfo,
 }

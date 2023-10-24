@@ -14,8 +14,9 @@ router.get('/city/list', auth, city.cityList)
 // Report routes
 router.post('/report/register', auth, report.reportRegister)
 router.patch('/report/update/situation', auth, report.reportUpdateSituation)
-router.get('/report/list/city/:city_id', auth, report.reportListByCity)
-router.get('/report/list/user/:user_id', auth, report.reportListByUser)
+router.get('/report/list/city/:city', auth, report.reportListByCity)
+router.get('/report/list/user/:user', auth, report.reportListByUser)
+router.get('/report/list/info/:city', auth, report.reportInfo)
 
 // User routes
 router.post('/user/recoverpassword', user.userRecoverPassword)
