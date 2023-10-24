@@ -11,7 +11,7 @@ const log = conn.define('logs', {
         allowNull: false,        
     },
     description: {
-        type: sequelize.STRING,
+        type: sequelize.TEXT,
         allowNull: false,        
     },    
 })
