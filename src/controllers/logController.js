@@ -1,10 +1,10 @@
 const logModel = require('../models/logModel')
 
-// Função que insere uma nova cidade 
+// Função que registra log de acessos e erros
 const register = (data) => {
     logModel.create( data ).then()    
 }
 
 module.exports = {
-    register,   
+    register,
 }

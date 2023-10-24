@@ -9,9 +9,9 @@ const cityRegister = (request, response) => {
         response.status(200).json({ message: 'City insert success!' });
     }).catch((err) => {      
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            name: err.name + ' | cityRegister',
+            description: err.message
         }) 
         response.status(500).json({ 
             message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
@@ -34,9 +34,9 @@ const cityList = (request, response) => {
         }
     }).catch((err) => {      
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            name: err.name + ' | cityList',
+            description: err.message
         }) 
         response.status(500).json({ message: 'Internal error!' });
     })

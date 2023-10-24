@@ -2,15 +2,15 @@ const sequelize = require('sequelize')
 const conn = require('./database')
 
 const log = conn.define('logs', {
-    requester: {
+    type: {
         type: sequelize.STRING,
         allowNull: false,        
     },
-    token: {
+    name: {
         type: sequelize.STRING,
         allowNull: false,        
     },
-    action: {
+    description: {
         type: sequelize.STRING,
         allowNull: false,        
     },    

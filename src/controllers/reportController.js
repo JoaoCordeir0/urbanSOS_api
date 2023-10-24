@@ -9,9 +9,9 @@ const reportRegister = (request, response) => {
         response.status(200).json({ message: 'Report insert success!' });
     }).catch((err) => {      
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            name: err.name = ' | reportRegister',
+            description: err.message
         }) 
         response.status(500).json({ 
             message: err.name == 'SequelizeForeignKeyConstraintError' ? 'Error! User or City does not exist!' : 'Internal error!'
@@ -34,9 +34,9 @@ const reportListByUser = (request, response) => {
         }
     }).catch((err) => {
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            name: err.name = ' | reportListByUser',
+            description: err.message
         }) 
         response.status(500).json({ message: 'Internal error!' });
     })
@@ -57,9 +57,9 @@ const reportListByCity = (request, response) => {
         }
     }).catch((err) => {
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'reportListByCity',
+            name: err.name,
+            description: err.message
         }) 
         response.status(500).json({ message: 'Internal error!' });
     })
@@ -81,9 +81,9 @@ const reportUpdateSituation = async (request, response) => {
             response.status(200).json({ message: 'Report situation updated success!' })
         }).catch((err) => {
             log.register({
-                requester: 'API - Error',
-                token: err.name,
-                action: err.message
+                type: 'reportUpdateSituation',
+                name: err.name,
+                description: err.message
             }) 
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -119,6 +119,11 @@ const reportInfo = async (request, response) => {
     }
     catch(e)
     {
+        log.register({
+            type: 'Err',
+            name: err.name = ' | reportInfo',
+            description: err.message
+        }) 
         response.status(500).json({ message: 'Internal error!' });
     }
 }

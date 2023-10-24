@@ -13,13 +13,14 @@ const verifyToken = (request, response, next) => {
     {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY)
         
-        if (decoded.requester && decoded.action)
+        if (decoded.name)
         {
-            log.register({
-                requester: decoded.requester,
-                token: token,
-                action: decoded.action
+            log.register({             
+                type: 'Access',
+                name: 'User ' + decoded.name + ' access',   
+                description: token,                                
             }) 
+
             return next()
         }
         

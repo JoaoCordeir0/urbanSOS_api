@@ -15,9 +15,9 @@ const userRegister = (request, response) => {
         response.status(200).json({ message: 'User insert success!' });
     }).catch((err) => {      
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            err_name: err.name + ' | userRegister',
+            err_description: err.message
         })   
         response.status(500).json({                         
             message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
@@ -39,9 +39,9 @@ const userAdmList = (request, response) => {
             response.status(200).json(adms)                   
         }).catch((err) => {      
             log.register({
-                requester: 'API - Error',
-                token: err.name,
-                action: err.message
+                type: 'Err',
+                err_name: err.name + ' | userAdmList',
+                err_description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -66,9 +66,9 @@ const userDetails = (request, response) => {
             response.status(200).json(user)               
         }).catch((err) => {
             log.register({
-                requester: 'API - Error',
-                token: err.name,
-                action: err.message
+                type: 'Err',
+                err_name: err.name + ' | userDetails',
+                err_description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -87,9 +87,9 @@ const userDelete = async (request, response) => {
         response.status(200).json({ message: 'User deleted success!' });
     }).catch((err) => {
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            err_name: err.name + ' | userDelete',
+            err_description: err.message
         })  
         response.status(500).json({ message: 'Internal error!' });
     })
@@ -125,9 +125,9 @@ const userLogin = (request, response) => {
         }
     }).catch((err) => {
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            err_name: err.name + ' | userLogin',
+            err_description: err.message
         })  
         response.status(500).json({ message: 'Internal error!' });
     })
@@ -147,9 +147,9 @@ const userUpdate = async (request, response) => {
             response.status(200).json({ message: 'User updated success!' })
         }).catch((err) => {
             log.register({
-                requester: 'API - Error',
-                token: err.name,
-                action: err.message
+                type: 'Err',
+                err_name: err.name + ' | userUpdate',
+                err_description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -175,9 +175,9 @@ const userRecoverPassword = async (request, response) => {
         }
     }).catch((err) => {
         log.register({
-            requester: 'API - Error',
-            token: err.name,
-            action: err.message
+            type: 'Err',
+            err_name: err.name + ' | userRecoverPassword',
+            err_description: err.message
         })  
         response.status(500).json({ message: 'Internal error!', err: err });
     })
