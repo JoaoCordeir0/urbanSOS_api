@@ -28,6 +28,12 @@ const verifyToken = (request, response, next) => {
     } 
     catch (err) 
     {
+        log.register({             
+            type: 'Err',
+            name: err.message,   
+            description: token,                                
+        }) 
+
         return response.status(401).json({ message: "Invalid Token" })
     }    
 };
