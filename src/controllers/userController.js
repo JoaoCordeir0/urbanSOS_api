@@ -16,8 +16,8 @@ const userRegister = (request, response) => {
     }).catch((err) => {      
         log.register({
             type: 'Err',
-            err_name: err.name + ' | userRegister',
-            err_description: err.message
+            name: err.name + ' | userRegister',
+            description: err.message
         })   
         response.status(500).json({                         
             message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
@@ -40,8 +40,8 @@ const userAdmList = (request, response) => {
         }).catch((err) => {      
             log.register({
                 type: 'Err',
-                err_name: err.name + ' | userAdmList',
-                err_description: err.message
+                name: err.name + ' | userAdmList',
+                description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -67,8 +67,8 @@ const userDetails = (request, response) => {
         }).catch((err) => {
             log.register({
                 type: 'Err',
-                err_name: err.name + ' | userDetails',
-                err_description: err.message
+                name: err.name + ' | userDetails',
+                description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -88,8 +88,8 @@ const userDelete = async (request, response) => {
     }).catch((err) => {
         log.register({
             type: 'Err',
-            err_name: err.name + ' | userDelete',
-            err_description: err.message
+            name: err.name + ' | userDelete',
+            description: err.message
         })  
         response.status(500).json({ message: 'Internal error!' });
     })
@@ -126,10 +126,10 @@ const userLogin = (request, response) => {
     }).catch((err) => {
         log.register({
             type: 'Err',
-            err_name: err.name + ' | userLogin',
-            err_description: err.message
+            name: err.name + ' | userLogin',
+            description: err.message
         })  
-        response.status(500).json({ message: 'Internal error!' });
+        response.status(500).json({ message: 'Internal error!', err: err.message });
     })
 }
 
@@ -148,8 +148,8 @@ const userUpdate = async (request, response) => {
         }).catch((err) => {
             log.register({
                 type: 'Err',
-                err_name: err.name + ' | userUpdate',
-                err_description: err.message
+                name: err.name + ' | userUpdate',
+                description: err.message
             })  
             response.status(500).json({ message: 'Internal error!' });
         })
@@ -176,8 +176,8 @@ const userRecoverPassword = async (request, response) => {
     }).catch((err) => {
         log.register({
             type: 'Err',
-            err_name: err.name + ' | userRecoverPassword',
-            err_description: err.message
+            name: err.name + ' | userRecoverPassword',
+            description: err.message
         })  
         response.status(500).json({ message: 'Internal error!', err: err });
     })

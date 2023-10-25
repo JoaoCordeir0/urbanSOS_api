@@ -11,20 +11,21 @@ const verifyToken = (request, response, next) => {
     
     try 
     {
-        const decoded = jwt.verify(token, process.env.TOKEN_KEY)
-        
-        if (decoded.name)
-        {
-            log.register({             
-                type: 'Access',
-                name: 'User ' + decoded.name + ' access',   
-                description: token,                                
-            }) 
+        const decoded = jwt.verify(token, process.env.TOKEN_KEY)           
 
-            return next()
-        }
+        if (!decoded.name)        
+            throw new Error("Invalid Token");  
         
-        throw new Error("Invalid Token");        
+        if (decoded.exp <= Math.round(new Date().getTime() / 1000))
+            throw new Error("Expired Token");  
+                      
+        log.register({             
+            type: 'Access',
+            name: 'User ' + decoded.name + ' access',   
+            description: token,                                
+        }) 
+
+        return next()
     } 
     catch (err) 
     {
@@ -34,7 +35,7 @@ const verifyToken = (request, response, next) => {
             description: token,                                
         }) 
 
-        return response.status(401).json({ message: "Invalid Token" })
+        return response.status(401).json({ message: err.message })
     }    
 };
 
