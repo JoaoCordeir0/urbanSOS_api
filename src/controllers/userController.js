@@ -183,6 +183,15 @@ const userRecoverPassword = async (request, response) => {
     })
 }
 
+// Função que valida os tokens e retorna as informações que esse tal transporta
+const userValidToken = (request, response) => {
+    jwt.verify(request.body.token, process.env.TOKEN_KEY, (err, decoded) => {
+        if (!err) {
+            response.status(200).json(decoded)
+        }
+    })
+} 
+
 module.exports = {
     userAdmList,
     userRegister,
@@ -191,4 +200,5 @@ module.exports = {
     userLogin,
     userRecoverPassword,
     userUpdate,
+    userValidToken,
 }
