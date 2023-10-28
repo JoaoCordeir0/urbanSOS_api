@@ -3,8 +3,8 @@ const router = express.Router()
 const auth = require("../middleware/auth");
 
 // Controllers
-const user = require('../controllers/userController')
 const city = require('../controllers/cityController')
+const user = require('../controllers/userController')
 const report = require('../controllers/reportController')
 
 // City routes
@@ -15,6 +15,7 @@ router.get('/city/list', auth, city.cityList)
 router.post('/report/register', auth, report.reportRegister)
 router.patch('/report/update/situation', auth, report.reportUpdateSituation)
 router.get('/report/list/city/:city', auth, report.reportListByCity)
+router.get('/report/details/:id', report.reportDetails)
 router.get('/report/list/user/:user', auth, report.reportListByUser)
 router.get('/report/list/info/:city', auth, report.reportInfo)
 

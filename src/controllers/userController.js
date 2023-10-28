@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel')
+const adminModel = require('../models/adminModel')
 const log = require("./logController")
 const Op = require('sequelize').Op;
 const bcrypt = require('bcryptjs');
@@ -26,35 +27,25 @@ const userRegister = (request, response) => {
 }
 
 // Função que lista os usuário administradores
-const userAdmList = (request, response) => {     
-    const count = userModel.count({
-        where: { lvl: 1, city: request.params.city },
-    })
-    
-    if (count)
-    {
-        userModel.findAll({
-            raw: true, where: { lvl: 1, city: request.params.city }
-        }).then((adms) => {
-            response.status(200).json(adms)                   
-        }).catch((err) => {      
-            log.register({
-                type: 'Err',
-                name: err.name + ' | userAdmList',
-                description: err.message
-            })  
-            response.status(500).json({ message: 'Internal error!' });
-        })
-    }
-    else 
-    {
-        response.status(200).json({ message: 'Adms not found!' });
+const userAdmList = async (request, response) => {     
+    try {
+        const admins = await userModel.findAll({ include: [
+            { model: adminModel, required: true, where: { status: 1 } }
+        ] })
+        response.status(200).json(admins)
+    } catch (err) {
+        log.register({
+            type: 'Err',
+            name: err.name + ' | userAdmList' ,
+            description: err.message
+        }) 
+        response.status(500).json({ message: 'Internal error!' });
     }    
 }
 
 // Função que retorna as informações de um usuário especifico
-const userDetails = (request, response) => {
-    const count = userModel.count({
+const userDetails = async (request, response) => {
+    const count = await userModel.count({
         where: { id: request.params.id  },
     })    
 
@@ -101,7 +92,7 @@ const userLogin = (request, response) => {
         raw: true, where: { 
             [Op.or]: [{ cpf: request.body.username }, { email: request.body.username }]            
         }
-    }).then(user => {                            
+    }).then(async user => {                                  
         if (user != undefined && bcrypt.compareSync(request.body.password, user.password))
         {            
             if (user.status != 1)
@@ -110,6 +101,9 @@ const userLogin = (request, response) => {
                 return
             }   
 
+            // Verifica se é um admin
+            const isAdmin = await adminModel.count({ where: { userId: user.id }})        
+
             const token = jwt.sign(
                 { user: user.id, name: user.name, email: user.email, cpf: user.cpf },
                 process.env.TOKEN_KEY,
@@ -117,7 +111,9 @@ const userLogin = (request, response) => {
                     expiresIn: '5h',
                 }
             )
-            response.status(200).json({ message: 'Login success!', access_token: token })
+            response.status(200).json( 
+                isAdmin ? { message: 'Login success!', access_token: token, access_admin: isAdmin } : { message: 'Login success!', access_token: token }
+            )
         }
         else
         {

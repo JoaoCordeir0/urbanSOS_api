@@ -35,7 +35,7 @@ const verifyToken = (request, response, next) => {
             description: token,                                
         }) 
 
-        return response.status(401).json({ message: err.message })
+        return response.status(401).json({ message: 'Invalid or expired Token' })
     }    
 };
 

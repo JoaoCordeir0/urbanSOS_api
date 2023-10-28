@@ -1,7 +1,7 @@
 const sequelize = require('sequelize')
 const conn = require('./database')
 
-const log = conn.define('logs', {
+const Log = conn.define('logs', {
     type: {
         type: sequelize.STRING,
         allowNull: false,        
@@ -16,6 +16,6 @@ const log = conn.define('logs', {
     },    
 })
 
-log.sync({force: false})
+Log.sync({force: false})
 
-module.exports = log
+module.exports = Log

@@ -1,7 +1,7 @@
 const sequelize = require('sequelize')
 const conn = require('./database')
 
-const user = conn.define('users', {  
+const User = conn.define('users', {  
     name: {
         type: sequelize.STRING,
         allowNull: false,        
@@ -23,21 +23,9 @@ const user = conn.define('users', {
     status: {
         type: sequelize.BOOLEAN,
         allowNull: false
-    },
-    lvl: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
-    city: {
-        type: sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'cities',
-            key: 'id' ,
-        }  
-    }  
+    },              
 })
 
-user.sync({force: false})
+User.sync({force: false})
 
-module.exports = user
+module.exports = User

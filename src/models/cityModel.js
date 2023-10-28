@@ -1,7 +1,7 @@
 const sequelize = require('sequelize')
 const conn = require('./database')
 
-const city = conn.define('cities', {
+const City = conn.define('cities', {
     name: {
         type: sequelize.STRING,
         allowNull: false,        
@@ -17,6 +17,6 @@ const city = conn.define('cities', {
     },
 })
 
-city.sync({force: false})
+City.sync({force: false})
 
-module.exports = city
+module.exports = City

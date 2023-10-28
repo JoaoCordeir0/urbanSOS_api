@@ -1,4 +1,5 @@
-const reportModel = require('../models/reportModel')
+const reportModel = require('../models/reportModel');
+const { report } = require('../router/router');
 const log = require("./logController")
 
 // Função que insere um novo report 
@@ -22,7 +23,7 @@ const reportRegister = (request, response) => {
 // Função que retorna os reports de um usuário
 const reportListByUser = (request, response) => {
     reportModel.findAll({
-        raw: true, where: { user: request.params.user }
+        raw: true, where: { userId: request.params.user }
     }).then(reports => {
         if (reports != undefined)
         {     
@@ -45,7 +46,7 @@ const reportListByUser = (request, response) => {
 // Função que retorna os reports de uma cidade
 const reportListByCity = (request, response) => {
     reportModel.findAll({
-        raw: true, where: { city: request.params.city }
+        raw: true, where: { cityId: request.params.city }
     }).then(reports => {
         if (reports != undefined)
         {     
@@ -81,8 +82,8 @@ const reportUpdateSituation = async (request, response) => {
             response.status(200).json({ message: 'Report situation updated success!' })
         }).catch((err) => {
             log.register({
-                type: 'reportUpdateSituation',
-                name: err.name,
+                type: 'Err',
+                name: err.name + ' | reportUpdateSituation',
                 description: err.message
             }) 
             response.status(500).json({ message: 'Internal error!' });
@@ -92,7 +93,24 @@ const reportUpdateSituation = async (request, response) => {
     {
         response.status(200).json({ message: 'Report not found!' })
     }
-    
+}
+
+// Função que coleta todas as informações de um chamado (Usuário e Cidade)
+const reportDetails = async (request, response) => {    
+    try {
+        const report = await reportModel.findOne({ include: [
+            { model: require('../models/userModel'), attributes: ['name', 'email', 'cpf', 'status']}, 
+            { model: require('../models/cityModel') }
+        ]})
+        response.status(200).json(report)
+    } catch (err) {
+        log.register({
+            type: 'Err',
+            name: err.name + ' | reportDetails' ,
+            description: err.message
+        }) 
+        response.status(500).json({ message: 'Internal error!' });
+    }    
 }
 
 // Função que coleta métricas que são usadas na dashboard do UrbanSOS Web
@@ -117,7 +135,7 @@ const reportInfo = async (request, response) => {
 
         response.status(200).json(data)
     }
-    catch(e)
+    catch(err)
     {
         log.register({
             type: 'Err',
@@ -133,5 +151,6 @@ module.exports = {
     reportListByUser,
     reportListByCity,
     reportUpdateSituation,
+    reportDetails,
     reportInfo,
 }

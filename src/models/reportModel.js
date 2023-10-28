@@ -1,7 +1,9 @@
 const sequelize = require('sequelize')
 const conn = require('./database')
+const User = require('./userModel')
+const City = require('./cityModel')
 
-const report = conn.define('reports', {
+const Report = conn.define('reports', {
     title: {
         type: sequelize.STRING,
         allowNull: false,        
@@ -29,25 +31,20 @@ const report = conn.define('reports', {
     status: {
         type: sequelize.INTEGER,
         allowNull: false,       
-    },   
-    user: {
-        type: sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'users',
-            key: 'id' ,
-        }                
-    },    
-    city: {
-        type: sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'cities',
-            key: 'id' ,
-        }  
-    }   
+    },       
 })
 
-report.sync({force: false})
+// Relacionamentos
 
-module.exports = report
+// ForeignKeys
+Report.belongsTo(User, { constraint: true, foreignKey: { allowNull: false }})
+Report.belongsTo(City, { constraint: true, foreignKey: { allowNull: false }})
+
+// Um usuário para varios chamados
+User.hasMany(Report)
+// Uma cidade para vários chamados
+City.hasMany(Report)
+
+Report.sync({force: false})
+
+module.exports = Report
