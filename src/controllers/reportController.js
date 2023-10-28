@@ -118,13 +118,13 @@ const reportInfo = async (request, response) => {
     try 
     {
         const count_total = await reportModel.count({
-            where: { city: request.params.city },
+            where: { cityId: request.params.city },
         })
         const count_opened = await reportModel.count({
-            where: { city: request.params.city, status: 0 },
+            where: { cityId: request.params.city, status: 0 },
         })
         const count_resolved = await reportModel.count({
-            where: { city: request.params.city, status: 1 },
+            where: { cityId: request.params.city, status: 1 },
         })
 
         const data = {
