@@ -19,7 +19,7 @@ router.get('/report/list/user/:user', auth, report.reportListByUser)
 router.get('/report/list/info/:city', auth, report.reportInfo)
 
 // User routes
-router.post('/user/validtoken', auth, user.userValidToken)
+router.post('/user/decodetoken', auth, user.userDecodeToken)
 router.post('/user/recoverpassword', user.userRecoverPassword)
 router.post('/user/login', user.userLogin)
 router.post('/user/register', auth, user.userRegister)
