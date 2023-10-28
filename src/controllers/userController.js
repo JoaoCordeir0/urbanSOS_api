@@ -105,15 +105,13 @@ const userLogin = (request, response) => {
             const isAdmin = await adminModel.count({ where: { userId: user.id }})        
 
             const token = jwt.sign(
-                { user: user.id, name: user.name, email: user.email, cpf: user.cpf },
+                { user: user.id, name: user.name, email: user.email, cpf: user.cpf, admin: isAdmin },
                 process.env.TOKEN_KEY,
                 { 
                     expiresIn: '5h',
                 }
             )
-            response.status(200).json( 
-                isAdmin ? { message: 'Login success!', access_token: token, access_admin: isAdmin } : { message: 'Login success!', access_token: token }
-            )
+            response.status(200).json({ message: 'Login success!', access_token: token })
         }
         else
         {
