@@ -1,7 +1,7 @@
 const log = require("../controllers/logController")
 const jwt = require("jsonwebtoken");
 
-const verifyToken = (request, response, next) => {
+const verifyToken = (request, response, next, lvlAuth) => {
     const token = request.body.token || request.query.token || request.headers["x-access-token"]
 
     if (!token) 
@@ -13,11 +13,11 @@ const verifyToken = (request, response, next) => {
     {
         const decoded = jwt.verify(token, process.env.TOKEN_KEY)           
 
-        if (!decoded.name)        
-            throw new Error("Invalid Token");  
-        
-        if (decoded.exp <= Math.round(new Date().getTime() / 1000))
-            throw new Error("Expired Token");  
+        if (lvlAuth == 'complex' && decoded.admin != 1) 
+            throw new Error("Permission Denied")
+
+        if (!decoded.name || !decoded.email || !decoded.cpf)        
+            throw new Error("Invalid token params ")                    
                       
         log.register({             
             type: 'Access',
@@ -37,6 +37,17 @@ const verifyToken = (request, response, next) => {
 
         return response.status(401).json({ message: 'Invalid or expired Token' })
     }    
-};
+}
 
-module.exports = verifyToken
+const simpleAuth = (request, response, next) => {
+    verifyToken(request, response, next, 'simple')
+}
+
+const complexAuth = (request, response, next) => {
+    verifyToken(request, response, next, 'complex')
+}
+
+module.exports = {
+    simpleAuth,
+    complexAuth,
+}
