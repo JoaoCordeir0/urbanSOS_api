@@ -6,6 +6,10 @@ const middleware = require("../middleware/auth");
 const city = require('../controllers/cityController')
 const user = require('../controllers/userController')
 const report = require('../controllers/reportController')
+const token = require('../controllers/tokenController')
+
+// Token routes
+router.post('/token/decode', middleware.simpleAuth, token.decodeToken)
 
 // City routes
 router.post('/city/register', middleware.complexAuth, city.cityRegister)
@@ -20,7 +24,6 @@ router.get('/report/list/user/:user', middleware.simpleAuth, report.reportListBy
 router.get('/report/list/info/:city', middleware.complexAuth, report.reportInfo)
 
 // User routes
-router.post('/user/decodetoken', middleware.simpleAuth, user.userDecodeToken)
 router.post('/user/recoverpassword', user.userRecoverPassword)
 router.post('/user/login', user.userLogin)
 router.post('/user/register', user.userRegister)

@@ -1,9 +1,9 @@
 const userModel = require('../models/userModel')
 const adminModel = require('../models/adminModel')
 const log = require("./logController")
+const token = require("./tokenController")
 const Op = require('sequelize').Op;
 const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
 
 // Função que insere um novo usuário 
 const userRegister = (request, response) => {
@@ -104,14 +104,9 @@ const userLogin = (request, response) => {
             // Verifica se é um admin
             const isAdmin = await adminModel.count({ where: { userId: user.id }})        
 
-            const token = jwt.sign(
-                { user: user.id, name: user.name, email: user.email, cpf: user.cpf, admin: isAdmin },
-                process.env.TOKEN_KEY,
-                { 
-                    expiresIn: '5h',
-                }
-            )
-            response.status(200).json({ message: 'Login success!', access_token: token })
+            const jwtToken = isAdmin ? token.generateAdminToken(user, isAdmin) : token.generateUserToken(user)
+            
+            response.status(200).json({ message: 'Login success!', access_token: jwtToken })
         }
         else
         {
@@ -177,15 +172,6 @@ const userRecoverPassword = async (request, response) => {
     })
 }
 
-// Função que valida os tokens e retorna as informações que esse tal transporta
-const userDecodeToken = (request, response) => {
-    jwt.verify(request.body.token, process.env.TOKEN_KEY, (err, decoded) => {
-        if (!err) {
-            response.status(200).json(decoded)
-        }
-    })
-} 
-
 module.exports = {
     userAdmList,
     userRegister,
@@ -193,6 +179,5 @@ module.exports = {
     userDelete,
     userLogin,
     userRecoverPassword,
-    userUpdate,
-    userDecodeToken,
+    userUpdate,    
 }
