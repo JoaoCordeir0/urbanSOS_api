@@ -98,7 +98,7 @@ const reportUpdateSituation = async (request, response) => {
 // Função que coleta todas as informações de um chamado (Usuário e Cidade)
 const reportDetails = async (request, response) => {    
     try {
-        const report = await reportModel.findOne({ include: [
+        const report = await reportModel.findOne({ where: { id: request.params.id }, include: [
             { model: require('../models/userModel'), attributes: ['name', 'email', 'cpf', 'status']}, 
             { model: require('../models/cityModel') }
         ]})
