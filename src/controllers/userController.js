@@ -13,7 +13,7 @@ const userRegister = (request, response) => {
     userModel.create(
         request.body 
     ).then(() => {
-        response.status(200).json({ message: 'User insert success!' });
+        response.status(200).json({ message: 'User registered successfully!' });
     }).catch((err) => {      
         log.register({
             type: 'Err',
