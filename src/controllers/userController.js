@@ -15,14 +15,19 @@ const userRegister = (request, response) => {
     ).then(() => {
         response.status(200).json({ message: 'User registered successfully!' });
     }).catch((err) => {      
-        log.register({
-            type: 'Err',
-            name: err.name + ' | userRegister',
-            description: err.message
-        })   
-        response.status(500).json({                         
-            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
-        });
+        if (err.name == 'SequelizeUniqueConstraintError')
+        {
+            response.status(200).json({ message: 'Email alredy exists in database!' });
+        }
+        else
+        {
+            log.register({
+                type: 'Err',
+                name: err.name + ' | userRegister',
+                description: err.message
+            })   
+            response.status(500).json({ message: 'Internal error!' });
+        }
     })
 }
 
