@@ -35,18 +35,7 @@ const generateAdminToken = (user, isAdmin) => {
     return token
 }
 
-
-// Função que valida os tokens e retorna as informações que esse tal transporta
-const decodeToken = (request, response) => {
-    jwt.verify(request.body.token, process.env.TOKEN_KEY, (err, decoded) => {
-        if (!err) {
-            response.status(200).json(decoded)
-        }
-    })
-} 
-
 module.exports = {
     generateUserToken,
     generateAdminToken,
-    decodeToken,
 }

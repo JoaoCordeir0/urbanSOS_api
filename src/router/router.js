@@ -8,9 +8,6 @@ const user = require('../controllers/userController')
 const report = require('../controllers/reportController')
 const token = require('../controllers/tokenController')
 
-// Token routes
-router.post('/token/decode', middleware.simpleAuth, token.decodeToken)
-
 // City routes
 router.post('/city/register', middleware.complexAuth, city.cityRegister)
 router.get('/city/list', middleware.complexAuth, city.cityList)

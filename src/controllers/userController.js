@@ -106,11 +106,11 @@ const userLogin = (request, response) => {
 
             const jwtToken = isAdmin ? token.generateAdminToken(user, isAdmin) : token.generateUserToken(user)
             
-            response.status(200).json({ message: 'Login success!', access_token: jwtToken })
+            response.status(200).json({ message: 'Login success!', access_token: jwtToken, user: user})
         }
         else
         {
-            response.status(200).json({ message: 'Username or password incorrect!' });
+            response.status(200).json({ message: 'Username or password incorrect!' })
         }
     }).catch((err) => {
         log.register({
@@ -118,7 +118,7 @@ const userLogin = (request, response) => {
             name: err.name + ' | userLogin',
             description: err.message
         })  
-        response.status(500).json({ message: 'Internal error!', err: err.message });
+        response.status(500).json({ message: 'Internal error!' })
     })
 }
 
