@@ -106,7 +106,9 @@ const userLogin = (request, response) => {
 
             const jwtToken = isAdmin ? token.generateAdminToken(user, isAdmin) : token.generateUserToken(user)
             
-            response.status(200).json({ message: 'Login success!', access_token: jwtToken, user: user})
+            response.status(200).json(
+                isAdmin ? { message: 'Login success!', admin: isAdmin, access_token: jwtToken, user: user} : { message: 'Login success!', access_token: jwtToken, user: user }
+            )
         }
         else
         {
