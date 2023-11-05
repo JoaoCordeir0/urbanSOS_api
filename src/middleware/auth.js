@@ -4,10 +4,8 @@ const jwt = require("jsonwebtoken");
 const verifyToken = (request, response, next, lvlAuth) => {
     const token = request.body.token || request.query.token || request.headers["x-access-token"]
 
-    if (!token) 
-    {
-        return response.status(403).json({ message: "A token is required for authentication" })
-    }
+    if (!token)     
+        return response.status(403).json({ message: "A token is required for authentication" })    
     
     try 
     {
@@ -17,13 +15,7 @@ const verifyToken = (request, response, next, lvlAuth) => {
             throw new Error("Permission Denied")
 
         if (!decoded.name || !decoded.email || !decoded.cpf)        
-            throw new Error("Invalid token params ")                    
-                      
-        log.register({             
-            type: 'Access',
-            name: 'User ' + decoded.name + ' access',   
-            description: token,                                
-        }) 
+            throw new Error("Invalid token params ")                                           
 
         return next()
     } 

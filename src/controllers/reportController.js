@@ -23,10 +23,13 @@ const reportRegister = (request, response) => {
 // Função que retorna os reports de um usuário
 const reportListByUser = (request, response) => {
     reportModel.findAll({
-        raw: true, where: { userId: request.params.user }
+        raw: true, 
+        order: [['id','DESC']],
+        limit: 25,
+        where: { userId: request.params.user },             
     }).then(reports => {
         if (reports != undefined)
-        {     
+        {   
             response.status(200).json(reports)               
         }
         else
@@ -46,7 +49,9 @@ const reportListByUser = (request, response) => {
 // Função que retorna os reports de uma cidade
 const reportListByCity = (request, response) => {
     reportModel.findAll({
-        raw: true, where: { cityId: request.params.city }
+        raw: true, 
+        order: [['id','DESC']],
+        where: { cityId: request.params.city },       
     }).then(reports => {
         if (reports != undefined)
         {     
