@@ -13,7 +13,7 @@ router.post('/city/register', middleware.complexAuth, city.cityRegister)
 router.get('/city/list', middleware.complexAuth, city.cityList)
 
 // Report routes
-router.post('/report/register', middleware.simpleAuth, report.reportRegister)
+router.put('/report/register', middleware.simpleAuth, report.reportRegister)
 router.patch('/report/update/situation', middleware.complexAuth, report.reportUpdateSituation)
 router.get('/report/list/city/:city', middleware.complexAuth, report.reportListByCity)
 router.get('/report/details/:id', report.reportDetails)
