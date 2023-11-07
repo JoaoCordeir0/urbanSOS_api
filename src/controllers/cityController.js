@@ -73,8 +73,8 @@ const cityConsultWithLatLng = async (request, response) => {
     const data = await getCityIdByLatLng(request.params.latitude, request.params.longitude)
 
     if (data.city != 0)
-        return response.status(200).json({ message: 'City found based on your address.', city: data.city, address: data.address })    
-    return response.status(200).json({ message: 'Your city does not yet use the UrbanSOS service.', city_id: 0, address: data.address })    
+        return response.status(200).json([{ message: 'City found based on your address.', city: data.city, address: data.address }])    
+    return response.status(200).json([{ message: 'Your city does not yet use the UrbanSOS service.', city_id: 0, address: data.address }])    
 }
 
 module.exports = {
