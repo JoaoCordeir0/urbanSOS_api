@@ -22,7 +22,8 @@ const cityRegister = (request, response) => {
 // Função que lista as cidades disponíveis 
 const cityList = (request, response) => {
     cityModel.findAll({
-       raw: true
+       raw: true,
+       where: { status: 1 }
     }).then((cities) => {
         if (cities != undefined)
         {     
