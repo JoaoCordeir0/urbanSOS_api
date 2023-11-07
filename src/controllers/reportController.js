@@ -77,19 +77,19 @@ const reportListByCity = (request, response) => {
 }
 
 // Função que atualiza o status de um report
-const reportUpdateSituation = async (request, response) => {
+const reportUpdateStatus = async (request, response) => {
     const count = await reportModel.count({
-        where: { id: request.body.report_id },
+        where: { id: request.body.report },
     })
       
     if (count)
     {
         await reportModel.update({
-            situation: request.body.situation_id,
+            status: request.body.status,
         }, {
-            where: { id: request.body.report_id }
+            where: { id: request.body.report }
         }).then(() => {
-            response.status(200).json({ message: 'Report situation updated success!' })
+            response.status(200).json({ message: 'Report status updated success!' })
         }).catch((err) => {
             log.register({
                 type: 'Err',
@@ -160,7 +160,7 @@ module.exports = {
     reportRegister,
     reportListByUser,
     reportListByCity,
-    reportUpdateSituation,
+    reportUpdateStatus,
     reportDetails,
     reportInfo,
 }
