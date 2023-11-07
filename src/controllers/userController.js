@@ -1,5 +1,6 @@
 const userModel = require('../models/userModel')
 const adminModel = require('../models/adminModel')
+const recoverpassModel = require('../models/recoverPassModel')
 const log = require("./logController")
 const token = require("./tokenController")
 const Op = require('sequelize').Op;

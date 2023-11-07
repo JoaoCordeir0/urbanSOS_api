@@ -15,6 +15,10 @@ const City = conn.define('cities', {
         allowNull: false,
         unique: true,
     },
+    status: {
+        type: sequelize.BOOLEAN,
+        allowNull: false
+    },
 })
 
 City.sync({force: false})

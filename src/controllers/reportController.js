@@ -1,9 +1,14 @@
 const reportModel = require('../models/reportModel');
+const city = require('./cityController')
 const { report } = require('../router/router');
 const log = require("./logController")
 
 // Função que insere um novo report 
-const reportRegister = (request, response) => {
+const reportRegister = async (request, response) => {       
+        
+    // Adiciona o id da cidade 
+    request.body.cityId = (await city.getCityIdByLatLng(request.body.latitude, request.body.longitude)).city   
+    
     reportModel.create(
         request.body
     ).then(() => {
