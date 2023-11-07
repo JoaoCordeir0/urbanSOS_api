@@ -9,7 +9,7 @@ const report = require('../controllers/reportController')
 
 // City routes
 router.post('/city/register', middleware.complexAuth, city.cityRegister)
-router.get('/city/list', middleware.complexAuth, city.cityList)
+router.get('/city/list', middleware.simpleAuth, city.cityList)
 router.get('/city/latlng/:latitude/:longitude', middleware.simpleAuth, city.cityConsultWithLatLng)
 
 // Report routes
