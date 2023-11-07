@@ -1,6 +1,5 @@
 const cityModel = require('../models/cityModel')
 const log = require('./logController')
-const axios = require('axios')
 
 // Função que insere uma nova cidade 
 const cityRegister = (request, response) => {
