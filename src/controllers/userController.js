@@ -98,22 +98,25 @@ const userLogin = (request, response) => {
             [Op.or]: [{ cpf: request.body.username }, { email: request.body.username }]
         }
     }).then(async user => {
-        if (user != undefined && bcrypt.compareSync(request.body.password, user.password)) {
+        if (user != undefined && bcrypt.compareSync(request.body.password, user.password)) 
+        {
             if (user.status != 1) {
                 response.status(200).json({ message: 'User not activated!' })
                 return
             }
 
             // Verifica se é um admin
-            const isAdmin = await adminModel.count({ where: { userId: user.id } })
+            const isAdmin = await adminModel.findOne({ raw:true, where: { userId: user.id } })
 
-            const jwtToken = isAdmin ? token.generateAdminToken(user, isAdmin) : token.generateUserToken(user)
-
-            response.status(200).json(
-                isAdmin ? { message: 'Login success!', admin: isAdmin, access_token: jwtToken, user: user } : { message: 'Login success!', access_token: jwtToken, user: user }
-            )
+            if (isAdmin != undefined)
+            {                
+                return response.status(200).json({ message: 'Login success!', access_token: token.generateAdminToken(user), admin: isAdmin, user: user })
+            }
+            
+            response.status(200).json({ message: 'Login success!', access_token: token.generateUserToken(user), user: user })
         }
-        else {
+        else 
+        {
             response.status(200).json({ message: 'Username or password incorrect!' })
         }
     }).catch((err) => {
@@ -122,7 +125,7 @@ const userLogin = (request, response) => {
             name: err.name + ' | userLogin',
             description: err.message
         })
-        response.status(500).json({ message: 'Internal error!' })
+        response.status(500).json({ message: 'Internal error!', err:err })
     })
 }
 

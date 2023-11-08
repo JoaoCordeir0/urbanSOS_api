@@ -18,14 +18,14 @@ const generateUserToken = (user) => {
 }
 
 // Função que gera token para administradores
-const generateAdminToken = (user, isAdmin) => {
+const generateAdminToken = (user) => {
     const token = jwt.sign(
         { 
             user: user.id, 
             name: user.name, 
             email: user.email, 
             cpf: user.cpf, 
-            admin: isAdmin 
+            admin: 1 
         },
         process.env.TOKEN_KEY,
         { 
