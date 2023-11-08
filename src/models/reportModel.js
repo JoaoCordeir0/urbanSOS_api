@@ -29,7 +29,7 @@ const Report = conn.define('reports', {
         allowNull: false,       
     },  
     status: {
-        type: sequelize.INTEGER,
+        type: sequelize.ENUM('Opened', 'In progress', 'Resolved'),
         allowNull: false,       
     },       
 })
@@ -45,6 +45,6 @@ User.hasMany(Report)
 // Uma cidade para vários chamados
 City.hasMany(Report)
 
-Report.sync({force: false})
+Report.sync({force: true})
 
 module.exports = Report
