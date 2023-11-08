@@ -45,6 +45,6 @@ User.hasMany(Report)
 // Uma cidade para vários chamados
 City.hasMany(Report)
 
-Report.sync({force: true})
+Report.sync({force: false})
 
 module.exports = Report
