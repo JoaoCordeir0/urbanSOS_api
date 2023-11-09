@@ -67,6 +67,37 @@ const cityDetails = (request, response) => {
     })
 }
 
+// Função que atualiza as informações de uma cidade
+const cityUpdate = async (request, response) => {        
+    const count = await cityModel.count({
+        where: { id: request.body.city },
+    })
+          
+    if (count)
+    {
+        await cityModel.update({           
+            email: request.body.email,
+            status: request.body.status,
+        }, { 
+            where: { id: request.body.city }
+        }).then(() => {
+            response.status(200).json({ message: 'City updated success!' })
+        }).catch((err) => {
+            log.register({
+                type: 'Err',
+                name: err.name + ' | cityUpdate',
+                description: err.message
+            }) 
+            response.status(500).json({ message: 'Internal error!' });
+        })
+    }
+    else
+    {
+        response.status(200).json({ message: 'City not found!' })
+    }
+}
+
+// Função que retorna o id da cidade com base na latite e longitude
 const cityIdByLatLng = async (request, response) => {
     let city = 0, address
     try
@@ -97,6 +128,7 @@ const cityIdByLatLng = async (request, response) => {
 module.exports = {
     cityRegister,
     cityList,
+    cityUpdate,
     cityIdByLatLng,
     cityDetails,    
 }

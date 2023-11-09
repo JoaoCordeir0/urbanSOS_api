@@ -125,7 +125,7 @@ const userLogin = (request, response) => {
             name: err.name + ' | userLogin',
             description: err.message
         })
-        response.status(500).json({ message: 'Internal error!', err:err })
+        response.status(500).json({ message: 'Internal error!' })
     })
 }
 

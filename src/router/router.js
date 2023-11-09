@@ -8,7 +8,8 @@ const user = require('../controllers/userController')
 const report = require('../controllers/reportController')
 
 // City routes
-router.post('/city/register', middleware.complexAuth, city.cityRegister)
+router.put('/city/register', middleware.complexAuth, city.cityRegister)
+router.put('/city/update', middleware.complexAuth, city.cityUpdate)
 router.get('/city/list', middleware.simpleAuth, city.cityList)
 router.get('/city/details/:id', middleware.complexAuth, city.cityDetails)
 router.get('/city/latlng/:latitude/:longitude', middleware.simpleAuth, city.cityIdByLatLng)

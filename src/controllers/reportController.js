@@ -1,6 +1,4 @@
 const reportModel = require('../models/reportModel');
-const city = require('./cityController')
-const { report } = require('../router/router');
 const log = require("./logController")
 
 // Função que insere um novo report 
