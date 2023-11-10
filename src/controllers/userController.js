@@ -36,7 +36,7 @@ const userAdmList = async (request, response) => {
     try {
         const admins = await userModel.findAll({
             include: [
-                { model: adminModel, required: true, where: { status: 1 } }
+                { model: adminModel, required: true, where: { status: 1, cityId: request.params.city } }
             ]
         })
         response.status(200).json(admins)
