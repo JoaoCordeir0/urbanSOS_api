@@ -119,7 +119,7 @@ const cityIdByLatLng = async (request, response) => {
     }    
     catch(e) { }
     
-    if (city != 0) 
+    if (city != 0 && status == 1) 
     {
         return response.status(200).json([{ 
             message: 'City found based on your address.', 
@@ -127,9 +127,18 @@ const cityIdByLatLng = async (request, response) => {
             status: status,
             address: address 
         }])    
-    }        
+    }     
+    else if (city != 0)
+    {
+        return response.status(200).json([{ 
+            message: 'The city you currently reside in has temporarily disabled service', 
+            city: city, 
+            status: 0,
+            address: address 
+        }])    
+    }   
     return response.status(200).json([{ 
-        message: 'Your city does not yet use the UrbanSOS service.', 
+        message: 'The city in which you currently reside does not use the UrbanSOS service', 
         city: 0, 
         status: 0,
         address: address }])    
