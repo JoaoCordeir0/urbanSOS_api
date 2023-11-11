@@ -99,20 +99,21 @@ const cityUpdate = async (request, response) => {
 
 // Função que retorna o id da cidade com base na latite e longitude
 const cityIdByLatLng = async (request, response) => {
-    let city = 0, address
+    let city = 0, status, address
     try
     {        
         const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + request.params.latitude + ',' + request.params.longitude + '&location_type=ROOFTOP&result_type=street_address&key=' + process.env.GOOGLE_API_KEY);
         const data = await response.json();       
         address = data.results[0].formatted_address        
 
-        let cities = await cityModel.findAll({ raw: true, where: { status: 1 }})
+        let cities = await cityModel.findAll({ raw: true })
 
         for (let c = 0; c < Object.keys(cities).length; c++)
         {
             if (address.toLowerCase().indexOf(cities[c].name.toLowerCase()) !== -1)
             {
-                city = cities[c].id                                 
+                city = cities[c].id                  
+                status = cities[c].status               
             }
         }                        
     }    
@@ -120,9 +121,18 @@ const cityIdByLatLng = async (request, response) => {
     
     if (city != 0) 
     {
-        return response.status(200).json([{ message: 'City found based on your address.', city: city, address: address }])    
+        return response.status(200).json([{ 
+            message: 'City found based on your address.', 
+            city: city, 
+            status: status,
+            address: address 
+        }])    
     }        
-    return response.status(200).json([{ message: 'Your city does not yet use the UrbanSOS service.', city: 0, address: address }])    
+    return response.status(200).json([{ 
+        message: 'Your city does not yet use the UrbanSOS service.', 
+        city: 0, 
+        status: 0,
+        address: address }])    
 }
 
 module.exports = {
