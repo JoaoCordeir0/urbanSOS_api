@@ -1,11 +1,12 @@
-const reportModel = require('../models/reportModel');
+const reportModel = require('../models/reportModel')
 const log = require("./logController")
+const notification = require('./notificationController')
 
 // Função que insere um novo report 
-const reportRegister = async (request, response) => {       
+const register = async (request, response) => {          
     reportModel.create(
         request.body
-    ).then(() => {
+    ).then(() => {        
         response.status(200).json({ message: 'Report insert success!' });
     }).catch((err) => {      
         log.register({
@@ -20,7 +21,7 @@ const reportRegister = async (request, response) => {
 }
 
 // Função que retorna os reports de um usuário
-const reportListByUser = (request, response) => {
+const listByUser = (request, response) => {
     reportModel.findAll({
         raw: true, 
         order: [['id','DESC']],
@@ -46,7 +47,7 @@ const reportListByUser = (request, response) => {
 }
 
 // Função que retorna os reports de uma cidade
-const reportListByCity = (request, response) => {
+const listByCity = (request, response) => {
     reportModel.findAll({
         raw: true, 
         order: [['id','DESC']],
@@ -71,7 +72,7 @@ const reportListByCity = (request, response) => {
 }
 
 // Função que atualiza o status de um report
-const reportUpdateStatus = async (request, response) => {
+const updateStatus = async (request, response) => {
     const count = await reportModel.count({
         where: { id: request.body.report },
     })
@@ -83,6 +84,9 @@ const reportUpdateStatus = async (request, response) => {
         }, {
             where: { id: request.body.report }
         }).then(() => {
+            // Chama função responsável por gerar uma notificação
+            notification.register(request.body.report)
+
             response.status(200).json({ message: 'Report status updated success!' })
         }).catch((err) => {
             log.register({
@@ -100,7 +104,7 @@ const reportUpdateStatus = async (request, response) => {
 }
 
 // Função que coleta todas as informações de um chamado (Usuário e Cidade)
-const reportDetails = async (request, response) => {    
+const details = async (request, response) => {    
     try {
         const report = await reportModel.findOne({ where: { id: request.params.id }, include: [
             { model: require('../models/userModel'), attributes: ['name', 'email', 'cpf', 'status']}, 
@@ -118,7 +122,7 @@ const reportDetails = async (request, response) => {
 }
 
 // Função que coleta métricas que são usadas na dashboard do UrbanSOS Web
-const reportInfo = async (request, response) => {
+const info = async (request, response) => {
     try 
     {
         const count_total = await reportModel.count({
@@ -151,10 +155,10 @@ const reportInfo = async (request, response) => {
 }
 
 module.exports = {
-    reportRegister,
-    reportListByUser,
-    reportListByCity,
-    reportUpdateStatus,
-    reportDetails,
-    reportInfo,
+    register,
+    listByUser,
+    listByCity,
+    updateStatus,
+    details,
+    info,
 }

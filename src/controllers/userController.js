@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 // Função que insere um novo usuário 
-const userRegister = (request, response) => {
+const register = (request, response) => {
     // Criptografa a senha usando Bcrypt 
     request.body.password = bcrypt.hashSync(request.body.password)
 
@@ -32,7 +32,7 @@ const userRegister = (request, response) => {
 }
 
 // Função que lista os usuário administradores
-const userAdmList = async (request, response) => {
+const admList = async (request, response) => {
     try {
         const admins = await userModel.findAll({
             include: [
@@ -51,7 +51,7 @@ const userAdmList = async (request, response) => {
 }
 
 // Função que retorna as informações de um usuário especifico
-const userDetails = async (request, response) => {
+const details = async (request, response) => {
     const count = await userModel.count({
         where: { id: request.params.id },
     })
@@ -76,7 +76,7 @@ const userDetails = async (request, response) => {
 }
 
 // Função que deleta um usuário especifico
-const userDelete = async (request, response) => {
+const del = async (request, response) => {
     await userModel.destroy({
         where: { id: request.params.id }
     }).then(() => {
@@ -92,7 +92,7 @@ const userDelete = async (request, response) => {
 }
 
 // Função que valida um Login podendo ser utilizado cpf ou email como username
-const userLogin = (request, response) => {
+const login = (request, response) => {
     userModel.findOne({
         raw: true, where: {
             [Op.or]: [{ cpf: request.body.username }, { email: request.body.username }]
@@ -130,7 +130,7 @@ const userLogin = (request, response) => {
 }
 
 // Função que atualiza um usuário
-const userUpdate = async (request, response) => {
+const update = async (request, response) => {
     const count = await userModel.count({
         where: { id: request.body.id },
     })
@@ -155,7 +155,7 @@ const userUpdate = async (request, response) => {
 }
 
 // Função que recupera a senha
-const userRecoverPassword = async (request, response) => {
+const recoverPassword = async (request, response) => {
     await userModel.findOne({
         raw: true, where: { email: request.body.email, status: 1 }
     }).then(user => {
@@ -204,11 +204,11 @@ const userRecoverPassword = async (request, response) => {
 }
 
 module.exports = {
-    userAdmList,
-    userRegister,
-    userDetails,
-    userDelete,
-    userLogin,
-    userRecoverPassword,
-    userUpdate,
+    admList,
+    register,
+    details,
+    del,
+    login,
+    recoverPassword,
+    update,
 }

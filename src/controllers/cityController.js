@@ -2,7 +2,7 @@ const cityModel = require('../models/cityModel')
 const log = require('./logController')
 
 // Função que insere uma nova cidade 
-const cityRegister = (request, response) => {
+const register = (request, response) => {
     cityModel.create(
         request.body
     ).then(() => {
@@ -20,7 +20,7 @@ const cityRegister = (request, response) => {
 }
 
 // Função que lista as cidades disponíveis 
-const cityList = (request, response) => {
+const list = (request, response) => {
     cityModel.findAll({
        raw: true,
        where: { status: 1 }
@@ -44,7 +44,7 @@ const cityList = (request, response) => {
 }
 
 // Função que lista as informações de uma cidade
-const cityDetails = (request, response) => {
+const details = (request, response) => {
     cityModel.findAll({
        raw: true,
        where: { id: request.params.id }
@@ -68,7 +68,7 @@ const cityDetails = (request, response) => {
 }
 
 // Função que atualiza as informações de uma cidade
-const cityUpdate = async (request, response) => {        
+const update = async (request, response) => {        
     const count = await cityModel.count({
         where: { id: request.body.city },
     })
@@ -98,7 +98,7 @@ const cityUpdate = async (request, response) => {
 }
 
 // Função que retorna o id da cidade com base na latite e longitude
-const cityIdByLatLng = async (request, response) => {
+const idByLatLng = async (request, response) => {
     let city = 0, status, address
     try
     {        
@@ -145,9 +145,9 @@ const cityIdByLatLng = async (request, response) => {
 }
 
 module.exports = {
-    cityRegister,
-    cityList,
-    cityUpdate,
-    cityIdByLatLng,
-    cityDetails,    
+    register,
+    list,
+    update,
+    idByLatLng,
+    details,    
 }
