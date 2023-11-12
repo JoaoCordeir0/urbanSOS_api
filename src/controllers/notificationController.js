@@ -23,6 +23,8 @@ const register = (report) => {
 const listByUser = (request, response) => {
     notificationModel.findAll({
         raw: true,
+        order: [['id','DESC']],
+        limit: 25,
         where: { 
             userId: request.params.user,
             createdAt: {
