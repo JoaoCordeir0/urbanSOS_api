@@ -58,7 +58,7 @@ const countByUser = async (request, response) => {
         },
     })
 
-    response.status(200).json({ message: 'Notifications count successfully!', count: count });
+    response.status(200).json([{ message: 'Notifications count successfully!', count: count }]);
 }
 
 module.exports = {
