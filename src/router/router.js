@@ -10,6 +10,7 @@ const notification = require('../controllers/notificationController')
 
 // Notification routes
 router.get('/notification/list/:user', middleware.simpleAuth, notification.listByUser)
+router.get('/notification/count/:user', middleware.simpleAuth, notification.countByUser)
 
 // City routes
 router.put('/city/register', middleware.complexAuth, city.register)

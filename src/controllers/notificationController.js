@@ -48,7 +48,21 @@ const listByUser = (request, response) => {
     })
 }
 
+const countByUser = async (request, response) => {
+    const count = await notificationModel.count({
+        where: { 
+            userId: request.params.user,
+            createdAt: {
+                [Op.gte]: require('sequelize').literal(`DATE_SUB(NOW(), INTERVAL 1 WEEK)`),
+            }
+        },
+    })
+
+    response.status(200).json({ message: 'Notifications count successfully!', count: count });
+}
+
 module.exports = {
     register,
     listByUser,
+    countByUser,
 }
