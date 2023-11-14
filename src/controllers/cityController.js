@@ -108,7 +108,9 @@ const idByLatLng = async (request, response) => {
             }
         }
     }
-    catch (e) { }
+    catch (e) { 
+        address = "Not found"
+    }
 
     log.register({
         type: 'LatLng',
