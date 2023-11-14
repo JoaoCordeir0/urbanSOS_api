@@ -95,13 +95,6 @@ const update = async (request, response) => {
 const idByLatLng = async (request, response) => {
     let city = 0, status, address, lat = request.params.latitude, lng = request.params.longitude
     try {
-
-        log.register({
-            type: 'LatLng',
-            name: 'CityIdByLatLng',
-            description: 'Lat: "' + lat + '" Lng: "' + lng + '"'
-        })
-
         const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&location_type=ROOFTOP&result_type=street_address&key=' + process.env.GOOGLE_API_KEY);
         const data = await response.json();
         address = data.results[0].formatted_address
@@ -116,6 +109,12 @@ const idByLatLng = async (request, response) => {
         }
     }
     catch (e) { }
+
+    log.register({
+        type: 'LatLng',
+        name: 'Lat: "' + lat + '" Lng: "' + lng + '"',
+        description: address
+    })
 
     if (city != 0 && status == 1) {
         return response.status(200).json([{
