@@ -7,14 +7,14 @@ const register = (request, response) => {
         request.body
     ).then(() => {
         response.status(200).json({ message: 'City insert success!' });
-    }).catch((err) => {      
+    }).catch((err) => {
         log.register({
             type: 'Err',
             name: err.name + ' | cityRegister',
             description: err.message
-        }) 
-        response.status(500).json({ 
-            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!' 
+        })
+        response.status(500).json({
+            message: err.name == 'SequelizeUniqueConstraintError' ? 'Email alredy exists in database!' : 'Internal error!'
         });
     })
 }
@@ -22,23 +22,21 @@ const register = (request, response) => {
 // Função que lista as cidades disponíveis 
 const list = (request, response) => {
     cityModel.findAll({
-       raw: true,
-       where: { status: 1 }
+        raw: true,
+        where: { status: 1 }
     }).then((cities) => {
-        if (cities != undefined)
-        {     
-            response.status(200).json(cities)               
+        if (cities != undefined) {
+            response.status(200).json(cities)
         }
-        else
-        {
+        else {
             response.status(200).json({ message: 'Cities not found!' });
         }
-    }).catch((err) => {      
+    }).catch((err) => {
         log.register({
             type: 'Err',
             name: err.name + ' | cityList',
             description: err.message
-        }) 
+        })
         response.status(500).json({ message: 'Internal error!' });
     })
 }
@@ -46,39 +44,36 @@ const list = (request, response) => {
 // Função que lista as informações de uma cidade
 const details = (request, response) => {
     cityModel.findAll({
-       raw: true,
-       where: { id: request.params.id }
+        raw: true,
+        where: { id: request.params.id }
     }).then((city) => {
-        if (city != undefined)
-        {     
-            response.status(200).json(city)               
+        if (city != undefined) {
+            response.status(200).json(city)
         }
-        else
-        {
+        else {
             response.status(200).json({ message: 'City not found!' });
         }
-    }).catch((err) => {      
+    }).catch((err) => {
         log.register({
             type: 'Err',
             name: err.name + ' | cityDetails',
             description: err.message
-        }) 
+        })
         response.status(500).json({ message: 'Internal error!' });
     })
 }
 
 // Função que atualiza as informações de uma cidade
-const update = async (request, response) => {        
+const update = async (request, response) => {
     const count = await cityModel.count({
         where: { id: request.body.city },
     })
-          
-    if (count)
-    {
-        await cityModel.update({           
+
+    if (count) {
+        await cityModel.update({
             email: request.body.email,
             status: request.body.status,
-        }, { 
+        }, {
             where: { id: request.body.city }
         }).then(() => {
             response.status(200).json({ message: 'City updated success!' })
@@ -87,61 +82,63 @@ const update = async (request, response) => {
                 type: 'Err',
                 name: err.name + ' | cityUpdate',
                 description: err.message
-            }) 
+            })
             response.status(500).json({ message: 'Internal error!' });
         })
     }
-    else
-    {
+    else {
         response.status(200).json({ message: 'City not found!' })
     }
 }
 
 // Função que retorna o id da cidade com base na latite e longitude
 const idByLatLng = async (request, response) => {
-    let city = 0, status, address
-    try
-    {        
-        const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + request.params.latitude + ',' + request.params.longitude + '&location_type=ROOFTOP&result_type=street_address&key=' + process.env.GOOGLE_API_KEY);
-        const data = await response.json();       
-        address = data.results[0].formatted_address        
+    let city = 0, status, address, lat = request.params.latitude, lng = request.params.longitude
+    try {
+
+        log.register({
+            type: 'LatLng',
+            name: 'CityIdByLatLng',
+            description: 'Lat: "' + lat + '" Lng: "' + lng + '"'
+        })
+
+        const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&location_type=ROOFTOP&result_type=street_address&key=' + process.env.GOOGLE_API_KEY);
+        const data = await response.json();
+        address = data.results[0].formatted_address
 
         let cities = await cityModel.findAll({ raw: true })
 
-        for (let c = 0; c < Object.keys(cities).length; c++)
-        {
-            if (address.toLowerCase().indexOf(cities[c].name.toLowerCase()) !== -1)
-            {
-                city = cities[c].id                  
-                status = cities[c].status               
+        for (let c = 0; c < Object.keys(cities).length; c++) {
+            if (address.toLowerCase().indexOf(cities[c].name.toLowerCase()) !== -1) {
+                city = cities[c].id
+                status = cities[c].status
             }
-        }                        
-    }    
-    catch(e) { }
-    
-    if (city != 0 && status == 1) 
-    {
-        return response.status(200).json([{ 
-            message: 'City found based on your address.', 
-            city: city, 
+        }
+    }
+    catch (e) { }
+
+    if (city != 0 && status == 1) {
+        return response.status(200).json([{
+            message: 'City found based on your address.',
+            city: city,
             status: status,
-            address: address 
-        }])    
-    }     
-    else if (city != 0)
-    {
-        return response.status(200).json([{ 
-            message: 'The city you currently reside in has temporarily disabled service', 
-            city: city, 
+            address: address
+        }])
+    }
+    else if (city != 0) {
+        return response.status(200).json([{
+            message: 'The city you currently reside in has temporarily disabled service',
+            city: city,
             status: 0,
-            address: address 
-        }])    
-    }   
-    return response.status(200).json([{ 
-        message: 'The city in which you currently reside does not use the UrbanSOS service', 
-        city: 0, 
+            address: address
+        }])
+    }
+    return response.status(200).json([{
+        message: 'The city in which you currently reside does not use the UrbanSOS service',
+        city: 0,
         status: 0,
-        address: address }])    
+        address: address
+    }])
 }
 
 module.exports = {
@@ -149,5 +146,5 @@ module.exports = {
     list,
     update,
     idByLatLng,
-    details,    
+    details,
 }
