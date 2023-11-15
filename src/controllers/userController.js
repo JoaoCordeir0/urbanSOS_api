@@ -18,7 +18,7 @@ const register = (request, response) => {
         response.status(200).json({ message: 'User registered successfully!' });
     }).catch((err) => {
         if (err.name == 'SequelizeUniqueConstraintError') {
-            response.status(200).json({ message: 'Email alredy exists in database!' });
+            response.status(200).json({ message: 'One or more documents entered are already registered!' });
         }
         else {
             log.register({
