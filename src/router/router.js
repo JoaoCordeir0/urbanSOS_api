@@ -23,7 +23,7 @@ router.get('/city/latlng/:latitude/:longitude', middleware.simpleAuth, city.idBy
 router.put('/report/register', report.register)
 router.patch('/report/update/status', middleware.complexAuth, report.updateStatus)
 router.get('/report/list/city/:city', middleware.complexAuth, report.listByCity)
-router.get('/report/details/:id', report.details)
+router.get('/report/details/:id', middleware.simpleAuth, report.details)
 router.get('/report/list/user/:user', middleware.simpleAuth, report.listByUser)
 router.get('/report/list/info/:city', middleware.complexAuth, report.info)
 
