@@ -110,7 +110,7 @@ const details = async (request, response) => {
             { model: require('../models/userModel'), attributes: ['name', 'email', 'cpf', 'status']}, 
             { model: require('../models/cityModel') }
         ]})
-        response.status(200).json(report)
+        response.status(200).json([report])
     } catch (err) {
         log.register({
             type: 'Err',
