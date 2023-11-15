@@ -1,5 +1,7 @@
 const cityModel = require('../models/cityModel')
 const log = require('./logController')
+const googleMaps = require('../services/googleMaps')
+const openCage = require('../services/openCage')
 
 // Função que insere uma nova cidade 
 const register = (request, response) => {
@@ -93,51 +95,42 @@ const update = async (request, response) => {
 
 // Função que retorna o id da cidade com base na latite e longitude
 const idByLatLng = async (request, response) => {
-    let city = 0, status, address, lat = request.params.latitude, lng = request.params.longitude
-    try {
-        const response = await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&location_type=ROOFTOP&result_type=street_address&key=' + process.env.GOOGLE_API_KEY);
-        const data = await response.json();
-        address = data.results[0].formatted_address
+    let api = 'googleMaps', city = 0, status = 0, address, message, lat = request.params.latitude, lng = request.params.longitude
+    
+    address = await googleMaps.getAddress(lat, lng)
 
-        let cities = await cityModel.findAll({ raw: true })
-
-        for (let c = 0; c < Object.keys(cities).length; c++) {
-            if (address.toLowerCase().indexOf(cities[c].name.toLowerCase()) !== -1) {
-                city = cities[c].id
-                status = cities[c].status
-            }
+    // Faz uma segunda request caso o address foi igual a "not_found"
+    if (address == 'not_found') {
+        api = 'openCage'
+        address = await openCage.getAddress(lat, lng)
+    }
+        
+    let cities = await cityModel.findAll({ raw: true })
+    for (let c = 0; c < Object.keys(cities).length; c++) {
+        if (address.toLowerCase().indexOf(cities[c].name.toLowerCase()) !== -1) {
+            city = cities[c].id
+            status = cities[c].status
         }
     }
-    catch (e) { 
-        address = "Not found"
+
+    if (city != 0 && status == 1) {
+        message = 'City found based on your address.'
+    } else if (city != 0) {
+        message = 'The city you currently reside in has temporarily disabled service'
+    } else {
+        message = 'The city in which you currently reside does not use the UrbanSOS service'
     }
 
     log.register({
-        type: 'LatLng',
-        name: 'Lat: "' + lat + '" Lng: "' + lng + '"',
+        type: 'Location',
+        name: `Api="${api} Lat="${lat}" Lng="${lng}"`,
         description: address
     })
 
-    if (city != 0 && status == 1) {
-        return response.status(200).json([{
-            message: 'City found based on your address.',
-            city: city,
-            status: status,
-            address: address
-        }])
-    }
-    else if (city != 0) {
-        return response.status(200).json([{
-            message: 'The city you currently reside in has temporarily disabled service',
-            city: city,
-            status: 0,
-            address: address
-        }])
-    }
-    return response.status(200).json([{
-        message: 'The city in which you currently reside does not use the UrbanSOS service',
-        city: 0,
-        status: 0,
+    response.status(200).json([{
+        message: message,
+        city: city,
+        status: status,
         address: address
     }])
 }
