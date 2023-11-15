@@ -123,7 +123,7 @@ const idByLatLng = async (request, response) => {
 
     log.register({
         type: 'Location',
-        name: `Api="${api} Lat="${lat}" Lng="${lng}"`,
+        name: `Api="${api}" Lat="${lat}" Lng="${lng}"`,
         description: address
     })
 
